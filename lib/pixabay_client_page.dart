@@ -15,11 +15,15 @@ class PixabayClientPageState extends State<PixabayClientPage> {
 
   String _query;
   var pictureSearch = true;
+  Color _pictureButtonColor = Colors.black;
+  Color _videoButtonColor = Colors.grey;
 
   @override
   void initState() {
     super.initState();
     pictureSearch = true;
+    _pictureButtonColor = Colors.black;
+    _videoButtonColor = Colors.grey;
   }
 
   @override
@@ -38,32 +42,7 @@ class PixabayClientPageState extends State<PixabayClientPage> {
         new Padding(
           padding: EdgeInsets.all(5.0),
           child: new Center(
-            child: new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new IconButton(
-                  onPressed: () {
-                    setState(() {
-                      pictureSearch = true;
-                    });
-                  },
-                  color: Colors.black,
-                  disabledColor: Colors.black38,
-                  icon: new Icon(Icons.photo_camera),
-                ),
-                new IconButton(
-                  onPressed: () {
-                    setState(() {
-                      pictureSearch = false;
-                    });
-                  },
-                  color: Colors.black,
-                  disabledColor: Colors.black38,
-                  icon: new Icon(Icons.videocam),
-                ),
-              ],
-            ),
+            child: _formatButtons(),
           ),
         ),
         new Center(
@@ -85,6 +64,37 @@ class PixabayClientPageState extends State<PixabayClientPage> {
               ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _formatButtons() {
+    return new Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new IconButton(
+          onPressed: () {
+            setState(() {
+              pictureSearch = true;
+              _pictureButtonColor = Colors.black;
+              _videoButtonColor = Colors.grey;
+            });
+          },
+          color: _pictureButtonColor,
+          icon: new Icon(Icons.photo_camera),
+        ),
+        new IconButton(
+          onPressed: () {
+            setState(() {
+              pictureSearch = false;
+              _pictureButtonColor = Colors.grey;
+              _videoButtonColor = Colors.black;
+            });
+          },
+          color: _videoButtonColor,
+          icon: new Icon(Icons.videocam),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pixabay_client/medium.dart';
+import 'package:pixabay_client/video_preview.dart';
 import 'dart:convert';
-import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
 class VideoPage extends StatefulWidget {
@@ -18,26 +19,12 @@ class VideoPage extends StatefulWidget {
 class VideoPageState extends State<VideoPage>{
 
   var videos = [];
-  final resultsPerPage = 20;
-  final String apiKey = "ADD API KEY HERE";
-  final String url = "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_20mb.mp4";
-  bool _isPlaying = false;
-  VideoPlayerController _controller;
+  final String apiKey = "8808390-af179c9f0fe2d28995f9dd023";
 
   @override
   void initState() {
     super.initState();
-   // _fetchVideos();
-    _controller = new VideoPlayerController.network(url)
-      ..addListener(() {
-        final bool isPlaying = _controller.value.isPlaying;
-        if (isPlaying != _isPlaying) {
-          setState(() {
-            _isPlaying = isPlaying;
-          });
-        }
-      })
-      ..initialize();
+    _fetchVideos();
   }
 
   _fetchVideos() async{
@@ -61,7 +48,11 @@ class VideoPageState extends State<VideoPage>{
       body: new ListView.builder(
         itemCount: videos.length,
         itemBuilder: (context, i) {
-          final video = this.videos[i];
+          final base = this.videos[i];
+          final video = base['videos'];
+          final medium = video['medium'];
+          final String url = medium['url'];
+
           return new Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -69,9 +60,34 @@ class VideoPageState extends State<VideoPage>{
               new Center(
                 child: new Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: new AspectRatio(
-                    aspectRatio: 1280 / 720,
-                    child: new VideoPlayer(_controller),
+                  child: new Column(
+                    children: <Widget>[
+                      new IconButton(
+                          icon: new Icon(Icons.play_circle_outline),
+                          iconSize: 50.0,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new VideoPreview(url)
+                              ),
+                            );
+                          }
+                      ),
+                      new Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                        "Press play to play",
+                        style: new TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),),
+                      new Text("${base['user']}"),
+                      new Text("${base['views']}"),
+                      new Text("${base['tags']}"),
+                      new Divider(),
+                    ],
                   ),
                 ),
               ),
