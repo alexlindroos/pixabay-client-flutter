@@ -19,7 +19,7 @@ class VideoPage extends StatefulWidget {
 class VideoPageState extends State<VideoPage>{
 
   var videos = [];
-  final String apiKey = "8808390-af179c9f0fe2d28995f9dd023";
+  final String apiKey = "ADD API KEY HERE";
 
   @override
   void initState() {
